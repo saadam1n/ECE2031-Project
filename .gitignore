@@ -1,0 +1,8 @@
+# Some files can be safely ignored to reduce the size of our project
+db/
+incremental_db/
+output_files/
+simulation/
+
+# ignore MIF files because they can be manually generated
+*.mif
