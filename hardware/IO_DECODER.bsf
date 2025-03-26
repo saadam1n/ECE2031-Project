@@ -4,7 +4,7 @@ editor if you plan to continue editing the block that represents it in
 the Block Editor! File corruption is VERY likely to occur.
 */
 /*
-Copyright (C) 2019  Intel Corporation. All rights reserved.
+Copyright (C) 2020  Intel Corporation. All rights reserved.
 Your use of Intel Corporation's design tools, logic functions 
 and other software and tools, and any partner logic 
 functions, and any output files from any of the foregoing 
@@ -21,9 +21,9 @@ https://fpgasoftware.intel.com/eula.
 */
 (header "symbol" (version "1.1"))
 (symbol
-	(rect 16 16 248 128)
+	(rect 16 16 248 288)
 	(text "IO_DECODER" (rect 5 0 71 12)(font "Arial" ))
-	(text "inst" (rect 8 96 20 108)(font "Arial" ))
+	(text "inst" (rect 8 256 20 268)(font "Arial" ))
 	(port
 		(pt 0 32)
 		(input)
@@ -66,7 +66,77 @@ https://fpgasoftware.intel.com/eula.
 		(text "HEX1_EN" (rect 168 75 211 87)(font "Arial" ))
 		(line (pt 232 80)(pt 216 80)(line_width 1))
 	)
+	(port
+		(pt 232 96)
+		(output)
+		(text "LED0_EN" (rect 0 0 44 12)(font "Arial" ))
+		(text "LED0_EN" (rect 167 91 211 103)(font "Arial" ))
+		(line (pt 232 96)(pt 216 96)(line_width 1))
+	)
+	(port
+		(pt 232 112)
+		(output)
+		(text "LED1_EN" (rect 0 0 43 12)(font "Arial" ))
+		(text "LED1_EN" (rect 168 107 211 119)(font "Arial" ))
+		(line (pt 232 112)(pt 216 112)(line_width 1))
+	)
+	(port
+		(pt 232 128)
+		(output)
+		(text "LED2_EN" (rect 0 0 44 12)(font "Arial" ))
+		(text "LED2_EN" (rect 167 123 211 135)(font "Arial" ))
+		(line (pt 232 128)(pt 216 128)(line_width 1))
+	)
+	(port
+		(pt 232 144)
+		(output)
+		(text "LED3_EN" (rect 0 0 44 12)(font "Arial" ))
+		(text "LED3_EN" (rect 167 139 211 151)(font "Arial" ))
+		(line (pt 232 144)(pt 216 144)(line_width 1))
+	)
+	(port
+		(pt 232 160)
+		(output)
+		(text "LED4_EN" (rect 0 0 46 12)(font "Arial" ))
+		(text "LED4_EN" (rect 165 155 211 167)(font "Arial" ))
+		(line (pt 232 160)(pt 216 160)(line_width 1))
+	)
+	(port
+		(pt 232 176)
+		(output)
+		(text "LED5_EN" (rect 0 0 44 12)(font "Arial" ))
+		(text "LED5_EN" (rect 167 171 211 183)(font "Arial" ))
+		(line (pt 232 176)(pt 216 176)(line_width 1))
+	)
+	(port
+		(pt 232 192)
+		(output)
+		(text "LED6_EN" (rect 0 0 44 12)(font "Arial" ))
+		(text "LED6_EN" (rect 167 187 211 199)(font "Arial" ))
+		(line (pt 232 192)(pt 216 192)(line_width 1))
+	)
+	(port
+		(pt 232 208)
+		(output)
+		(text "LED7_EN" (rect 0 0 44 12)(font "Arial" ))
+		(text "LED7_EN" (rect 167 203 211 215)(font "Arial" ))
+		(line (pt 232 208)(pt 216 208)(line_width 1))
+	)
+	(port
+		(pt 232 224)
+		(output)
+		(text "LED8_EN" (rect 0 0 44 12)(font "Arial" ))
+		(text "LED8_EN" (rect 167 219 211 231)(font "Arial" ))
+		(line (pt 232 224)(pt 216 224)(line_width 1))
+	)
+	(port
+		(pt 232 240)
+		(output)
+		(text "LED9_EN" (rect 0 0 44 12)(font "Arial" ))
+		(text "LED9_EN" (rect 167 235 211 247)(font "Arial" ))
+		(line (pt 232 240)(pt 216 240)(line_width 1))
+	)
 	(drawing
-		(rectangle (rect 16 16 216 96)(line_width 1))
+		(rectangle (rect 16 16 216 256)(line_width 1))
 	)
 )
