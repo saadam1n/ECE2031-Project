@@ -15,38 +15,24 @@ USE LPM.LPM_COMPONENTS.ALL;
 
 ENTITY LEDController IS
 PORT(
-    CLK			: IN  STD_LOGIC;
-    CS          : IN  STD_LOGIC;
+    CLK			 : IN  STD_LOGIC;
+    EN_signals  : IN  STD_LOGIC_VECTOR(9 DOWNTO 0);
     WRITE_EN    : IN  STD_LOGIC;
     RESETN      : IN  STD_LOGIC;
     LEDs        : OUT STD_LOGIC_VECTOR(9 DOWNTO 0);
     IO_DATA     : IN  STD_LOGIC_VECTOR(15 DOWNTO 0);
 
     DBG_TIMER_OUT   : OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
-	DBG_DUTY_CYCLE_OUT : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
+	 DBG_DUTY_CYCLE_OUT : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
     );
 END LEDController;
 
 ARCHITECTURE a OF LEDController IS
     SIGNAL TIMER        : STD_LOGIC_VECTOR(6 DOWNTO 0);
     SIGNAL DUTY_CYCLE   : STD_LOGIC_VECTOR(6 DOWNTO 0);
+	 SIGNAL DUTY_CYCLE_NEXT	: STD_LOGIC_VECTOR(6 DOWNTO 0);
 BEGIN
 	-- This process block updates the brightnesses for LEDs
-    PROCESS (RESETN, CS)
-    BEGIN
-        IF (RESETN = '0') THEN
-            -- Set all LEDs to a duty cycle of 0
-            DUTY_CYCLE <= "0000000";
-				
-        ELSIF (RISING_EDGE(CS)) THEN
-            -- Update the selected LED's duty cycle
-            IF(WRITE_EN = '1') THEN
-                DUTY_CYCLE <= IO_DATA(6 downto 0);
-            END IF;
-
-        END IF;
-
-    END PROCESS;
 
     PROCESS(RESETN, CLK)
     BEGIN
@@ -54,6 +40,8 @@ BEGIN
         IF(RESETN = '0') THEN
             -- Set timer to zero
             TIMER <= "0000000";
+				DUTY_CYCLE <= "0000000";
+
         ELSIF(RISING_EDGE(CLK)) THEN
 
             -- Increment timer. If it equals 100 reset it back to zero
@@ -61,6 +49,10 @@ BEGIN
             IF(TIMER = "1100100") THEN
                 TIMER <= "0000000";
             END IF;
+				
+				IF (WRITE_EN = '1' AND or_reduce(EN_signals) = '1') THEN
+						DUTY_CYCLE <= IO_DATA(6 downto 0);
+				END IF;
 
         END IF;
 
