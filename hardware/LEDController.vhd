@@ -20,7 +20,7 @@ PORT(
     WRITE_EN    : IN    STD_LOGIC;
     RESETN      : IN    STD_LOGIC;
     LEDs        : OUT   STD_LOGIC_VECTOR(9 DOWNTO 0);
-    IO_DATA     : IN    STD_LOGIC_VECTOR(15 DOWNTO 0);
+    IO_DATA     : INOUT    STD_LOGIC_VECTOR(15 DOWNTO 0);
 
 	DBG_DUTY_CYCLE : OUT STD_LOGIC_VECTOR(6 DOWNTO 0);
     DBG_TIMER : OUT STD_LOGIC_VECTOR(6 DOWNTO 0)
@@ -30,9 +30,13 @@ END LEDController;
 ARCHITECTURE a OF LEDController IS
 
     type DUTY_CYCLE_ARRAY is array (9 DOWNTO 0) of std_logic_vector(6 DOWNTO 0);
+	 type BRIGHTNESS_ARRAY is array (9 DOWNTO 0) of STD_LOGIC_VECTOR(6 DOWNTO 0);
 
     SIGNAL TIMER        : STD_LOGIC_VECTOR(6 DOWNTO 0);
     SIGNAL DUTY_CYCLE   : DUTY_CYCLE_ARRAY;
+	 SIGNAL BRIGHTNESS	: BRIGHTNESS_ARRAY;
+	 SIGNAL CS				: STD_LOGIC;
+	 SIGNAL SEL	: INTEGER RANGE 0 TO 9 := 0;
 
 BEGIN
 	-- Update our timer 
@@ -64,6 +68,7 @@ BEGIN
 
             IF(RESETN = '0') THEN
                 DUTY_CYCLE(i) <= "0000000";
+					 BRIGHTNESS(i) <= "0000000";
             ELSIF(RISING_EDGE(EN_signals(i)) AND WRITE_EN = '1') THEN
 					CASE IO_DATA(6 downto 0) IS
 						WHEN "0000000" => DUTY_CYCLE(i) <= "0000000";
@@ -169,6 +174,7 @@ BEGIN
 						WHEN "1100100" => DUTY_CYCLE(i) <= "1100100";
 						WHEN OTHERS => DUTY_CYCLE(i) <= "1111111";
 					END CASE;
+					BRIGHTNESS(i) <= IO_DATA(6 DOWNTO 0);
 
             END IF;
 
@@ -178,9 +184,42 @@ BEGIN
         LEDs(i) <= '1' when TIMER < DUTY_CYCLE(i) else '0';
 
     END GENERATE;
-
+	 
+	 
+	 PROCESS (EN_signals) BEGIN
+	 CASE EN_signals(9 DOWNTO 0) IS
+		WHEN "0000000001" => SEL <= 0;
+		WHEN "0000000010" => SEL <= 1;
+		WHEN "0000000100" => SEL <= 2;
+		WHEN "0000001000" => SEL <= 3;
+		WHEN "0000010000" => SEL <= 4;
+		WHEN "0000100000" => SEL <= 5;
+		WHEN "0001000000" => SEL <= 6;
+		WHEN "0010000000" => SEL <= 7;
+		WHEN "0100000000" => SEL <= 8;
+		WHEN "1000000000" => SEL <= 9;
+		WHEN OTHERS => SEL <= 0;
+	 END CASE;
+	 CASE EN_signals(9 DOWNTO 0) IS
+		WHEN "0000000000" => CS <= '0';
+		WHEN OTHERS => CS <= '1';
+	 END CASE;
+	 END PROCESS;
+	 
     DBG_DUTY_CYCLE <= DUTY_CYCLE(1);
     DBG_TIMER <= TIMER;
+	 
+	 -- Use LPM function to create bidirectional I/O data bus
+    IO_BUS: lpm_bustri
+    GENERIC MAP (
+      lpm_width => 16
+    )
+    PORT MAP (
+      data     => "000000000" & BRIGHTNESS(SEL),
+      enabledt => (CS AND NOT(WRITE_EN)),
+      tridata  => IO_DATA
+    );
+
 
 END a;
 
