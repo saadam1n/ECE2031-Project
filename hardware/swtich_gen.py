@@ -6,8 +6,8 @@ with open("lut-vhd.txt", "w") as f:
     for i in range(101):
         linear = bin(i)[2:].zfill(7)
 
-        gamma = int(100 * math.pow(i / 100, 1.0 / 2.2))
-        gamma = bin(gamma)[2:].zfill(7)
+        gamma = int(math.ceil(1000 * math.pow(i / 100, 2.2)))
+        gamma = bin(gamma)[2:].zfill(10)
 
 
         f.write(f"\tWHEN \"{linear}\" => DUTY_CYCLE(i) <= \"{gamma}\";\n")
