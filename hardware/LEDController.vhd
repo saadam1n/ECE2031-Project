@@ -215,7 +215,7 @@ BEGIN
       lpm_width => 16
     )
     PORT MAP (
-      data     => "000000000" & BRIGHTNESS(SEL),
+      data     => ("000000000" & BRIGHTNESS(SEL)),
       enabledt => (CS AND NOT(WRITE_EN)),
       tridata  => IO_DATA
     );
